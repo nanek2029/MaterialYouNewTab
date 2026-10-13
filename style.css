@@ -4758,8 +4758,12 @@ body[data-bg="wallpaper"] .dropdown-content {
 		margin-inline-start: var(--gap);
 		margin-inline-end: auto;
 	}
+
+	/* Rules were edited to make sure all shortcuts are visible, no wrapping  */
 	.shortcutsContainer {
-		row-gap: 2rem;
+		max-width: none;
+		flex-wrap: nowrap;
+		justify-content: flex-start;
 	}
 	#shortcuts-section {
 		padding-inline-start: 30px;
@@ -4767,7 +4771,7 @@ body[data-bg="wallpaper"] .dropdown-content {
 		overflow-x: scroll;
 		scrollbar-width: none;
 		position: fixed;
-		max-width: 40rem;
+		max-width: none;
 		inset-inline-start: 0;
 		bottom: 0;
 	}
@@ -4808,7 +4812,9 @@ body[data-bg="wallpaper"] .dropdown-content {
 	}
 	#shortcuts-section {
 		position: fixed;
-		bottom: 62px;
+		bottom: var(--gap); /* align vertically with bottom right menu button */
+		left: var(--gap); /* align left side */
+		right: calc(50px + var(--gap) * 2); /* prevents overlapping with the menu button on right*/
 		width: 100%;
 		max-width: none;
 		overflow-x: scroll;
@@ -4817,6 +4823,7 @@ body[data-bg="wallpaper"] .dropdown-content {
 	.shortcutsContainer {
 		max-width: none;
 		flex-wrap: nowrap;
+		justify-content: flex-start; /* Align shortcuts to the left */
 	}
 	#shortcuts-section .wrapper {
 		width: 100%;
@@ -4885,16 +4892,65 @@ body[data-bg="wallpaper"] .dropdown-content {
 	#enterBtn {
 		display: none;
 	}
+
 	#shortcuts-section {
-		height: auto;
-		position: relative;
-		scale: 0.85;
-		width: calc(100vw / 0.85);
-		margin-left: calc(50vw - 50vw / 0.85);
-		margin-top: 0;
-		max-width: unset;
-		bottom: 0;
-	}
+        position: fixed;
+        bottom: 0; /* remove the gap to align with bottom of the screen */
+        left: 0;
+        right: 0;
+        width: 100vw;
+        height: 60px;
+        margin: 0 !important;
+        padding: 0 var(--gap) !important;
+        display: flex;
+        justify-content: flex-start; 
+        align-items: center;
+        overflow-x: auto; 
+        overflow-y: hidden;
+        scrollbar-width: none; 
+        -ms-overflow-style: none; 
+        transform: none;
+        z-index: 100;
+    }
+
+    /* hides scrollbar for Chrome/Safari */
+    #shortcuts-section::-webkit-scrollbar {
+        display: none;
+    }
+
+    #shortcuts-section .wrapper {
+        width: max-content; /* Allows the container to expand with the items */
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100%;
+        margin: 0 auto;
+    }
+
+    .shortcutsContainer {
+        display: flex !important;
+        flex-direction: row !important;
+        flex-wrap: nowrap !important; /* no wrapping allowed */
+        width: max-content !important;
+        gap: 0.6rem; 
+        margin: 0 !important;
+        padding: 0 !important;
+        align-items: center;
+        background-color: transparent !important;
+    }
+
+    .shortcutsContainer::before {
+        display: none !important;
+    }
+
+    /* Scales down the shortcut icons so they fit neatly */
+    .shortcutsContainer .shortcuts a {
+        --shortcut-size: 40px; 
+        height: var(--shortcut-size);
+        width: var(--shortcut-size);
+        flex-shrink: 0; /* Prevents icons from squishing */
+    }
+
 	.todoListCont {
 		transform-origin: top left;
 		scale: 0.8;
@@ -5120,6 +5176,89 @@ body[data-bg="wallpaper"] .dropdown-content {
 	}
 }
 
+/* this section was added to target a specific width that was having problems */ 
+@media screen and (max-width: 500px), screen and (max-width: 425px) {
+    body {
+        display: flex;
+        min-height: 100vh;
+        flex-direction: column;
+        justify-content: flex-start;
+        padding-top: 60px;
+        padding-bottom: 90px; /* prevents content from being cut off */
+        overflow-y: auto; /* ensures page scrolling enabled if content vertically overflows */
+    }
+
+    .centerDiv {
+        margin-bottom: 30px; 
+        padding-bottom: 0;
+    }
+
+    #shortcuts-section {
+        height: 38px;
+        position: fixed;
+        bottom: calc(var(--gap) + 6px); 
+        left: calc(var(--gap) + 8px); 
+        right: calc(50px + var(--gap) * 2 + 8px); 
+        width: auto;
+        max-width: unset;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+        transform: none;
+        z-index: 10; /* keeps shortcuts  above content */
+    }
+
+    #menuButton {
+        z-index: 10;
+    }
+
+    #shortcuts-section .wrapper {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100%;
+        margin: 0;
+        padding: 0;
+    }
+
+    .shortcutsContainer {
+        margin: 0 auto;
+        margin-top: 0;
+        width: 100%;
+        gap: 1.2rem; 
+        flex-wrap: nowrap;
+        max-width: 100%;
+        padding: 0;
+        height: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-color: transparent;
+    }
+
+    .shortcutsContainer::before {
+        display: none;
+    }
+
+    .shortcutsContainer .shortcuts {
+        display: flex;
+        align-items: center;
+        height: 100%;
+    }
+
+    .shortcutsContainer .shortcuts a {
+        --shortcut-size: 38px; 
+        height: var(--shortcut-size);
+        width: var(--shortcut-size);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+}
 /* ------------------- Dark(Black) theme ------------------- */
 .black-theme .search-engine input[type="radio"]:checked {
 	background-color: #2a2a2a;
